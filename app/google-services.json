@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1053941669331",
+    "firebase_url": "https://krokoyecto.firebaseio.com",
+    "project_id": "krokoyecto",
+    "storage_bucket": "krokoyecto.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1053941669331:android:0aea607592d4a1d5",
+        "android_client_info": {
+          "package_name": "com.losextraditables.krokodil"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1053941669331-5flltird7oeuscvrrukmn8h486g1cdss.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDuDQ7krQSM4wi3RxBjTSYatu8tigyS6k"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

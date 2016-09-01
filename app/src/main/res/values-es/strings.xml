@@ -1,0 +1,27 @@
+<resources>
+  <string name="app_name">Krokodil Music Downloader</string>
+  <string name="search_song">Buscar canción</string>
+  <string name="activity_find_song_hint">Buscar</string>
+  <string name="fab_search_video">Buscar vídeo</string>
+  <string name="fab_add_url">Descargar mediante un enlace</string>
+  <string name="fab_share">Comparte esta app</string>
+  <string name="storage_permission_first_explanation">Necesitamos tu permiso para poder descargar canciones en tu móvil</string>
+  <string name="button_settings">Ajustes</string>
+  <string name="write_permission_rationale_explanation">Seguro que no quieres que descarguemos canciones en tu móvil?</string>
+  <string name="permission_rationale_title">Tenemos que hablar</string>
+  <string name="snackbar_permission_permanently_denied">Nosotros te queremos… ¿por qué no nos quieres?</string>
+  <string name="download_song_description">Quieres descargar esto?</string>
+  <string name="update_alert_title">Actualízate!</string>
+  <string name="update_alert_message">Hemos hecho mejoras que requieren actualizarse a la última versión.</string>
+  <string name="share_this_awesome_app">Comparte esta app</string>
+  <string name="share_app_message">Si quieres descargar música fácilmente, deberías probar esto</string>
+  <string name="share_app_website">https://artjimlop.github.io/</string>
+  <string name="share_app_subject">Descarga música de Youtube</string>
+  <string name="share_shot_chooser_title">Compartir</string>
+  <string name="youtube_link_pettern">https://www.youtube.com/watch?v=</string>
+  <string name="button_download_song">Descargar</string>
+  <string name="button_cancel">Cancelar</string>
+  <string name="message_unknown_link">No somos capaces de reconocer el link</string>
+  <string name="alert_youtube_link_title">Introduce un enlace de YouTube</string>
+  <string name="youtube_short_link_pettern">https://youtu.be/</string>
+</resources>

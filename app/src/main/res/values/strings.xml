@@ -1,0 +1,31 @@
+<resources>
+  <string name="app_name">Krokodil Music Downloader</string>
+  <string name="search_song">Search song</string>
+  <string name="activity_find_song_hint">Search</string>
+  <string name="fab_search_video">Search video</string>
+  <string name="fab_add_url">Download using link</string>
+  <string name="fab_share">Share this awesome app</string>
+  <string name="storage_permission_first_explanation">We need your permission to store what you download on your mobile phone</string>
+  <string name="button_settings">Settings</string>
+  <string name="write_permission_rationale_explanation">Are you sure you don\'t want to allow us download your songs in your phone?</string>
+  <string name="permission_rationale_title">We need to talk</string>
+  <string name="snackbar_permission_permanently_denied">We love you, why don\'t you love us?</string>
+  <string name="download_song_description">Are you sure you want to download it?</string>
+  <string name="update_alert_title">Update!</string>
+  <string name="update_alert_message">We\'ve built improvements that require updating to the newest
+    version.
+  </string>
+  <string name="share_this_awesome_app">Share this awesome app</string>
+  <string name="share_app_message">If you want to download music directly from YouTube to your
+    mobile phone, you should try this
+  </string>
+  <string name="share_app_website">https://artjimlop.github.io/</string>
+  <string name="share_app_subject">Download Youtube Music</string>
+  <string name="share_shot_chooser_title">Share</string>
+  <string name="youtube_link_pettern">https://www.youtube.com/watch?v=</string>
+  <string name="button_download_song">Download</string>
+  <string name="button_cancel">Cancel</string>
+  <string name="message_unknown_link">Unknown link, sorry</string>
+  <string name="alert_youtube_link_title">Enter a YouTube link</string>
+  <string name="youtube_short_link_pettern">https://youtu.be/</string>
+</resources>

@@ -1,0 +1,113 @@
+buildscript {
+  repositories {
+    maven { url 'https://maven.fabric.io/public' }
+    mavenCentral()
+  }
+  dependencies {
+    classpath 'io.fabric.tools:gradle:1.+'
+    // the latest version of the android-apt plugin
+    classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+    classpath 'me.tatarka:gradle-retrolambda:3.2.5'
+    classpath 'com.google.gms:google-services:3.0.0'
+  }
+}
+
+repositories {
+  maven {
+    url 'https://maven.fabric.io/public'
+    maven { url "https://jitpack.io" }
+    mavenCentral()
+  }
+}
+
+apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
+apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'io.fabric'
+apply plugin: 'com.google.gms.google-services'
+
+def cfg = rootProject.ext.configuration;
+
+def versionMajor = 0
+def versionMinor = 0
+def versionRevision = 1
+
+Properties properties = new Properties()
+def props = file('../signin.properties')
+
+properties.load(new FileInputStream(props))
+
+def keystorePassword = properties['STORE_PASSWORD']
+def keyAliasProp = properties['KEY_ALIAS']
+def keyPasswordProp = properties['KEY_PASSWORD']
+
+android {
+  signingConfigs {
+    release {
+      keyAlias keyAliasProp
+      keyPassword keyPasswordProp
+      storeFile file('../app/extraditados.jks')
+      storePassword keystorePassword
+    }
+  }
+  compileSdkVersion 24
+  buildToolsVersion "24.0.1"
+  defaultConfig {
+    applicationId "com.losextraditables.krokodil"
+    minSdkVersion 15
+    targetSdkVersion 24
+    versionCode versionMajor * 1000000 + versionMinor * 1000 + versionRevision
+    versionName versionMajor + "." + versionMinor + "." + versionRevision
+  }
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
+  packagingOptions {
+    exclude 'META-INF/LICENSE'
+    exclude 'META-INF/LICENSE-FIREBASE.txt'
+    exclude 'META-INF/NOTICE'
+  }
+  buildTypes {
+    debug {}
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+      signingConfig signingConfigs.release
+    }
+  }
+}
+
+dependencies {
+  compile fileTree(dir: 'libs', include: ['*.jar'])
+  testCompile 'junit:junit:4.12'
+  compile 'com.android.support:appcompat-v7:24.2.0'
+  compile 'com.makeramen:roundedimageview:2.2.1'
+  compile 'com.jakewharton:butterknife:8.4.0'
+  apt 'com.jakewharton:butterknife-compiler:8.4.0'
+  compile('com.twitter.sdk.android:twitter:1.14.1@aar') {
+    transitive = true;
+  }
+  compile('com.crashlytics.sdk.android:crashlytics:2.6.1@aar') {
+    transitive = true;
+  }
+  provided 'org.projectlombok:lombok:1.12.6'
+  apt "org.projectlombok:lombok:1.12.6"
+  compile 'com.github.pedrovgs:renderers:3.2.0'
+  compile 'com.squareup.picasso:picasso:2.5.2'
+  compile 'com.github.clans:fab:1.6.4'
+  compile 'com.googlecode.mp4parser:isoparser:1.1.17'
+  compile 'com.github.HaarigerHarald:android-youtubeExtractor:master-SNAPSHOT'
+  compile 'com.karumi:dexter:2.2.2'
+  // Arch dependencies
+  provided 'org.glassfish:javax.annotation:10.0-b28'
+  apt "com.google.dagger:dagger-compiler:2.4"
+  compile 'com.google.dagger:dagger:2.4'
+  // Data dependencies
+  compile 'com.squareup.retrofit2:retrofit:2.0.2'
+  compile 'com.squareup.retrofit2:retrofit:2.0.2'
+  compile 'com.squareup.retrofit2:converter-gson:2.0.2'
+  compile 'com.squareup.okhttp3:okhttp:3.2.0'
+  compile 'com.squareup.okhttp3:logging-interceptor:3.2.0'
+  compile 'com.firebase:firebase-client-android:2.5.2+'
+}

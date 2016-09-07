@@ -15,13 +15,15 @@
  */
 package com.losextraditables.krokodil.android.infrastructure.data.repositories;
 
-import com.losextraditables.krokodil.android.infrastructure.data.models.VideoEntity;
 import com.losextraditables.krokodil.android.infrastructure.data.models.search.SearchResponseEntity;
+import com.losextraditables.krokodil.android.infrastructure.data.models.video.VideoApiEntity;
 import java.util.List;
 
 public interface VideoDataSource {
 
-    List<VideoEntity> getPopulars();
+    List<VideoApiEntity> getPopulars();
 
     List<SearchResponseEntity> search(String query);
+
+    List<VideoApiEntity> getVideosById(List<String> videoIds);
 }

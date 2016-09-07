@@ -20,6 +20,7 @@ public class VideoModelMapper {
     videoModel.setDescription(video.getDescription());
     videoModel.setId(video.getId());
     videoModel.setTitle(video.getTitle());
+    videoModel.setViewCount(video.getViewCount());
     return videoModel;
   }
 

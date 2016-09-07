@@ -29,4 +29,8 @@ public class VideoRepositoryImpl implements VideoRepository {
   @Override public List<SearchItem> search(String query) {
     return searchEntityMapper.toModel(videoDataSource.search(query));
   }
+
+  @Override public List<Video> getVideos(List<String> videoIds) {
+    return videoEntityMapper.toModel(videoDataSource.getVideosById(videoIds));
+  }
 }

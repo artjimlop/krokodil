@@ -5,6 +5,7 @@ import com.losextraditables.krokodil.core.infrastructure.exception.ServerCommuni
 import com.losextraditables.krokodil.core.infrastructure.executor.PostExecutionThread;
 import com.losextraditables.krokodil.core.infrastructure.executor.ThreadExecutor;
 import com.losextraditables.krokodil.core.model.Video;
+import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -29,7 +30,12 @@ public class GetPopularVideosAction implements Action {
 
   @Override public void run() {
     try {
-      notifyLoaded(videoRepository.getPopularVideos());
+      List<Video> popularVideos = videoRepository.getPopularVideos();
+      List<String> ids = new ArrayList<>(popularVideos.size());
+      for (Video popularVideo : popularVideos) {
+        ids.add(popularVideo.getId());
+      }
+      notifyLoaded(videoRepository.getVideos(ids));
     } catch (ServerCommunicationException error) {
       //TODO
     }

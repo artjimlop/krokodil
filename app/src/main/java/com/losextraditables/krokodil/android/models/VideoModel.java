@@ -12,4 +12,5 @@ public class VideoModel {
   private String title;
   private String description;
   private List<String> thumbnails;
+  private Long viewCount;
 }

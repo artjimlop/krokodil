@@ -29,7 +29,7 @@ import com.firebase.client.ValueEventListener;
 import com.losextraditables.krokodil.AndroidApplication;
 import com.losextraditables.krokodil.BuildConfig;
 import com.losextraditables.krokodil.R;
-import com.losextraditables.krokodil.android.infrastructure.data.models.Version;
+import com.losextraditables.krokodil.android.infrastructure.data.models.version.Version;
 import com.losextraditables.krokodil.android.infrastructure.injector.component.ApplicationComponent;
 
 public abstract class BaseActivity extends AppCompatActivity {

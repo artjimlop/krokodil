@@ -15,10 +15,10 @@
  */
 package com.losextraditables.krokodil.android.infrastructure.data.repositories;
 
-import com.losextraditables.krokodil.android.infrastructure.data.models.VideoEntity;
-import com.losextraditables.krokodil.android.infrastructure.data.models.VideoListResponse;
-import com.losextraditables.krokodil.android.infrastructure.data.models.search.SearchListResponse;
+import com.losextraditables.krokodil.android.infrastructure.data.models.search.SearchListResponseApiEntity;
 import com.losextraditables.krokodil.android.infrastructure.data.models.search.SearchResponseEntity;
+import com.losextraditables.krokodil.android.infrastructure.data.models.video.VideoApiEntity;
+import com.losextraditables.krokodil.android.infrastructure.data.models.video.VideoListResponseApiEntity;
 import com.losextraditables.krokodil.android.infrastructure.data.net.services.VideoApiService;
 import com.losextraditables.krokodil.core.infrastructure.exception.ServerCommunicationException;
 import java.io.IOException;
@@ -36,10 +36,10 @@ public class RetrofitVideoDataSource implements VideoDataSource {
         this.videoApiService = videoApiService;
     }
 
-    @Override public List<VideoEntity> getPopulars() {
+    @Override public List<VideoApiEntity> getPopulars() {
         try {
-            Call<VideoListResponse> call = videoApiService.getPopularVideos();
-            Response<VideoListResponse> response = call.execute();
+            Call<VideoListResponseApiEntity> call = videoApiService.getPopularVideos();
+            Response<VideoListResponseApiEntity> response = call.execute();
             return response.body().getItems();
         } catch (IOException e) {
             throw new ServerCommunicationException(e);
@@ -48,8 +48,26 @@ public class RetrofitVideoDataSource implements VideoDataSource {
 
     @Override public List<SearchResponseEntity> search(String query) {
         try {
-            Call<SearchListResponse> call = videoApiService.searchVideos(query);
-            Response<SearchListResponse> response = call.execute();
+            Call<SearchListResponseApiEntity> call = videoApiService.searchVideos(query);
+            Response<SearchListResponseApiEntity> response = call.execute();
+            return response.body().getItems();
+        } catch (IOException e) {
+            throw new ServerCommunicationException(e);
+        }
+    }
+
+    @Override public List<VideoApiEntity> getVideosById(List<String> videoIds) {
+        try {
+            String ids = "";
+            for (int i = 0; i < videoIds.size(); i++) {
+                if(i < videoIds.size() -1) {
+                    ids+=videoIds.get(i)+",";
+                } else {
+                    ids+=videoIds.get(i);
+                }
+            }
+            Call<VideoListResponseApiEntity> call = videoApiService.getVideos(ids);
+            Response<VideoListResponseApiEntity> response = call.execute();
             return response.body().getItems();
         } catch (IOException e) {
             throw new ServerCommunicationException(e);

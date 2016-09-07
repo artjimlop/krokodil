@@ -1,4 +1,4 @@
-package com.losextraditables.krokodil.android.infrastructure.data.models;
+package com.losextraditables.krokodil.android.infrastructure.data.models.video;
 
 import lombok.Data;
 

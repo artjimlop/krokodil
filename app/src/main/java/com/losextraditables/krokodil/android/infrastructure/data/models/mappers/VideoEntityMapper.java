@@ -21,6 +21,7 @@ public class VideoEntityMapper {
     video.setDescription(videoEntity.getSnippet().getDescription());
     video.setTitle(videoEntity.getSnippet().getTitle());
     video.setPublishedAt(videoEntity.getSnippet().getPublishedAt());
+    video.setChannelTitle(videoEntity.getSnippet().getChannelTitle());
 
     Map<String, ThumbnailParameters> thumbnails = videoEntity.getSnippet().getThumbnails();
     List<String> thumbnailUrls = new ArrayList<>();

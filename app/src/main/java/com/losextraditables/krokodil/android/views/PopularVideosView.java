@@ -6,4 +6,8 @@ import java.util.List;
 public interface PopularVideosView {
 
   void showVideos(List<VideoModel> videoModels);
+
+  void showLoading();
+
+  void hideLoading();
 }

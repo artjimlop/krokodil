@@ -10,5 +10,6 @@ public class Snippet {
   private String title;
   private String description;
   private Map<String, ThumbnailParameters> thumbnails;
+  private String channelTitle;
   //TODO private List<Thumbnail> thumbnails;
 }

@@ -13,4 +13,5 @@ public class VideoModel {
   private String description;
   private List<String> thumbnails;
   private Long viewCount;
+  private String channelTitle;
 }

@@ -10,7 +10,6 @@ package com.losextraditables.krokodil.android.infrastructure.data.net.services;
 
 import com.losextraditables.krokodil.android.infrastructure.data.models.search.SearchListResponseApiEntity;
 import com.losextraditables.krokodil.android.infrastructure.data.models.video.VideoListResponseApiEntity;
-import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;

@@ -5,6 +5,8 @@ import com.losextraditables.krokodil.core.infrastructure.exception.ServerCommuni
 import com.losextraditables.krokodil.core.infrastructure.executor.PostExecutionThread;
 import com.losextraditables.krokodil.core.infrastructure.executor.ThreadExecutor;
 import com.losextraditables.krokodil.core.model.SearchItem;
+import com.losextraditables.krokodil.core.model.Video;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
@@ -14,7 +16,7 @@ public class SearchVideosAction implements Action {
   private final ThreadExecutor threadExecutor;
   private final PostExecutionThread postExecutionThread;
   private final VideoRepository videoRepository;
-  private Callback<List<SearchItem>> callback;
+  private Callback<List<Video>> callback;
   private String query;
 
   @Inject public SearchVideosAction(ThreadExecutor threadExecutor,
@@ -24,7 +26,7 @@ public class SearchVideosAction implements Action {
     this.videoRepository = videoRepository;
   }
 
-  public void search(String query, Callback<List<SearchItem>> callback) {
+  public void search(String query, Callback<List<Video>> callback) {
     this.query = query;
     this.callback = callback;
     threadExecutor.execute(this);
@@ -32,8 +34,13 @@ public class SearchVideosAction implements Action {
 
   @Override public void run() {
     try {
-      if (videoRepository.search(query) != null) {
-        notifyLoaded(videoRepository.search(query));
+      List<SearchItem> search = videoRepository.search(query);
+      if (search != null) {
+        List<String> ids = new ArrayList<>(search.size());
+        for (SearchItem searchItem : search) {
+          ids.add(searchItem.getVideoId());
+        }
+        notifyLoaded(videoRepository.getVideos(ids));
       } else {
         notifyLoaded(Collections.emptyList());
       }
@@ -42,7 +49,7 @@ public class SearchVideosAction implements Action {
     }
   }
 
-  private void notifyLoaded(final List<SearchItem> videos) {
+  private void notifyLoaded(final List<Video> videos) {
     this.postExecutionThread.post(() -> callback.onLoaded(videos));
   }
 }

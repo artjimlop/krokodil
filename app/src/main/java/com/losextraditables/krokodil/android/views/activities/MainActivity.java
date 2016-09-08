@@ -11,8 +11,10 @@ import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -49,6 +51,7 @@ public class MainActivity extends BaseActivity implements PopularVideosView {
   @BindView(R.id.popular_video_list) RecyclerView popularVideos;
   @BindView(R.id.search_menu) FloatingActionButton menu;
   @BindView(R.id.content) ViewGroup rootView;
+  @BindView(R.id.loading_view) ProgressBar loadingView;
 
   private RendererBuilder<VideoModel> rendererBuilder;
   private RVRendererAdapter<VideoModel> adapter;
@@ -65,7 +68,6 @@ public class MainActivity extends BaseActivity implements PopularVideosView {
 
     rendererBuilder = new RendererBuilder<VideoModel>().withPrototype(new VideoRenderer())
         .bind(VideoModel.class, VideoRenderer.class);
-    //TODO finish
 
     presenter.initialize(this);
   }
@@ -98,6 +100,14 @@ public class MainActivity extends BaseActivity implements PopularVideosView {
     ListAdapteeCollection<VideoModel> adapteeCollection = new ListAdapteeCollection<>(videoModels);
     adapter = new RVRendererAdapter<>(rendererBuilder, adapteeCollection);
     popularVideos.setAdapter(adapter);
+  }
+
+  @Override public void showLoading() {
+    loadingView.setVisibility(View.VISIBLE);
+  }
+
+  @Override public void hideLoading() {
+    loadingView.setVisibility(View.GONE);
   }
 
   @OnClick(R.id.search_menu) public void onSearchClick() {

@@ -1,5 +1,6 @@
 package com.losextraditables.krokodil.android.views.renders;
 
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,11 +10,15 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.example.KMNumbers;
 import com.losextraditables.krokodil.R;
 import com.losextraditables.krokodil.android.infrastructure.tools.Downloader;
 import com.losextraditables.krokodil.android.models.VideoModel;
 import com.pedrogomez.renderers.Renderer;
 import com.squareup.picasso.Picasso;
+import org.joda.time.Period;
+import org.joda.time.format.ISOPeriodFormat;
+import org.joda.time.format.PeriodFormatter;
 
 public class VideoRenderer extends Renderer<VideoModel> {
 
@@ -22,6 +27,8 @@ public class VideoRenderer extends Renderer<VideoModel> {
   @BindView(R.id.video_more_info) TextView moreInfo;
   @BindView(R.id.video_info) View info;
   @BindView(R.id.video_title) TextView title;
+  @BindView(R.id.video_frame) View durationFrame;
+  @BindView(R.id.video_duration) TextView duration;
 
   //@BindView(R.id.video_duration) TextView duration;
 
@@ -32,7 +39,6 @@ public class VideoRenderer extends Renderer<VideoModel> {
   }
 
   @Override public void render() {
-    //TODO things to show video here
     VideoModel video = getContent();
     image.setVisibility(View.VISIBLE);
     Picasso.with(getContext())
@@ -40,11 +46,40 @@ public class VideoRenderer extends Renderer<VideoModel> {
         .placeholder(R.drawable.loading_video)
         .into(image);
     info.setVisibility(View.VISIBLE);
-    //duration.setVisibility(View.VISIBLE);
-    //duration.setText(video.getDuration());
     title.setVisibility(View.VISIBLE);
     title.setText(video.getTitle());
-    author.setText(video.getDescription());
+    author.setText(video.getChannelTitle());
+    setupDuration(video);
+    setupVisits(video);
+  }
+
+  private void setupVisits(VideoModel video) {
+    String visits = String.format(getContext().getString(R.string.format_visits),
+        KMNumbers.formatNumbers(video.getViewCount()));
+    moreInfo.setVisibility(View.VISIBLE);
+    moreInfo.setText(visits);
+  }
+
+  private void setupDuration(VideoModel video) {
+    durationFrame.setVisibility(View.VISIBLE);
+    PeriodFormatter standard = ISOPeriodFormat.standard();
+    Period period = standard.parsePeriod(video.getDuration());
+    int hours = period.getHours();
+    int minutes = period.getMinutes();
+    int seconds = period.getSeconds();
+    String time = getStringDuration(minutes) + ":" + getStringDuration(seconds);
+    if (hours > 0) {
+      time = getStringDuration(hours) + ":" + getStringDuration(minutes) + ":" + getStringDuration(
+          seconds);
+    }
+    duration.setText(time);
+  }
+
+  @NonNull private String getStringDuration(int duration) {
+    if (duration < 10) {
+      return "0" + String.valueOf(duration);
+    }
+    return String.valueOf(duration);
   }
 
   @OnClick(R.id.video_layout) void onVideoClicked() {
@@ -56,7 +91,8 @@ public class VideoRenderer extends Renderer<VideoModel> {
         })
         .setPositiveButton(android.R.string.ok, (dialog, which) -> {
           Downloader downloader = new Downloader();
-          downloader.getYoutubeDownloadUrl("https://www.youtube.com/watch?v=" + video.getId(), getContext());
+          downloader.getYoutubeDownloadUrl("https://www.youtube.com/watch?v=" + video.getId(),
+              getContext());
         })
         .show();
   }

@@ -21,6 +21,7 @@ public class VideoModelMapper {
     videoModel.setId(video.getId());
     videoModel.setTitle(video.getTitle());
     videoModel.setViewCount(video.getViewCount());
+    videoModel.setChannelTitle(video.getChannelTitle());
     return videoModel;
   }
 

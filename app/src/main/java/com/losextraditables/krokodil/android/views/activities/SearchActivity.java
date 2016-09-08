@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ProgressBar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.losextraditables.krokodil.R;
@@ -17,7 +18,7 @@ import com.losextraditables.krokodil.android.infrastructure.injector.component.A
 import com.losextraditables.krokodil.android.infrastructure.injector.component.DaggerVideosComponent;
 import com.losextraditables.krokodil.android.infrastructure.injector.module.ActivityModule;
 import com.losextraditables.krokodil.android.infrastructure.injector.module.VideoModule;
-import com.losextraditables.krokodil.android.models.SearchItemModel;
+import com.losextraditables.krokodil.android.models.VideoModel;
 import com.losextraditables.krokodil.android.presenters.SearchVideosPresenter;
 import com.losextraditables.krokodil.android.views.SearchVideosView;
 import com.losextraditables.krokodil.android.views.renders.SearchItemRenderer;
@@ -31,10 +32,11 @@ public class SearchActivity extends BaseActivity implements SearchVideosView {
 
   @Inject SearchVideosPresenter presenter;
   @BindView(R.id.results_videos_list) RecyclerView resultVideos;
+  @BindView(R.id.loading_view) ProgressBar loadingView;
 
   private SearchView searchView;
-  private RendererBuilder<SearchItemModel> rendererBuilder;
-  private RVRendererAdapter<SearchItemModel> adapter;
+  private RendererBuilder<VideoModel> rendererBuilder;
+  private RVRendererAdapter<VideoModel> adapter;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -53,9 +55,9 @@ public class SearchActivity extends BaseActivity implements SearchVideosView {
 
     resultVideos.setLayoutManager(new LinearLayoutManager(this));
 
-    rendererBuilder = new RendererBuilder<SearchItemModel>()
+    rendererBuilder = new RendererBuilder<VideoModel>()
         .withPrototype(new SearchItemRenderer())
-        .bind(SearchItemModel
+        .bind(VideoModel
             .class, SearchItemRenderer.class);
   }
 
@@ -72,7 +74,8 @@ public class SearchActivity extends BaseActivity implements SearchVideosView {
     MenuItem searchItem = menu.findItem(R.id.menu_search);
     createSearchView(searchItem);
     SearchView.SearchAutoComplete searchAutoComplete =
-        (SearchView.SearchAutoComplete) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        (SearchView.SearchAutoComplete) searchView.findViewById(
+            android.support.v7.appcompat.R.id.search_src_text);
     searchAutoComplete.setHintTextColor(getResources().getColor(R.color.colorAccent));
     return true;
   }
@@ -104,8 +107,8 @@ public class SearchActivity extends BaseActivity implements SearchVideosView {
     searchView.setIconified(false);
   }
 
-  @Override public void showVideos(List<SearchItemModel> videoModels) {
-    ListAdapteeCollection<SearchItemModel> adapteeCollection = new ListAdapteeCollection<>(videoModels);
+  @Override public void showVideos(List<VideoModel> videoModels) {
+    ListAdapteeCollection<VideoModel> adapteeCollection = new ListAdapteeCollection<>(videoModels);
     adapter =
         new RVRendererAdapter<>(rendererBuilder, adapteeCollection);
     resultVideos.setAdapter(adapter);
@@ -114,5 +117,13 @@ public class SearchActivity extends BaseActivity implements SearchVideosView {
   @Override public void hideKeyboard() {
     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
     imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
+  }
+
+  @Override public void showLoading() {
+    loadingView.setVisibility(View.VISIBLE);
+  }
+
+  @Override public void hideLoading() {
+    loadingView.setVisibility(View.GONE);
   }
 }

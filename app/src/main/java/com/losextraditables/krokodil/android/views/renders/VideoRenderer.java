@@ -1,7 +1,6 @@
 package com.losextraditables.krokodil.android.views.renders;
 
 import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +11,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.example.KMNumbers;
 import com.losextraditables.krokodil.R;
-import com.losextraditables.krokodil.android.infrastructure.tools.Downloader;
 import com.losextraditables.krokodil.android.models.VideoModel;
+import com.losextraditables.krokodil.android.views.activities.VideoDetailActivity;
 import com.pedrogomez.renderers.Renderer;
 import com.squareup.picasso.Picasso;
 import org.joda.time.Period;
@@ -84,17 +83,8 @@ public class VideoRenderer extends Renderer<VideoModel> {
 
   @OnClick(R.id.video_layout) void onVideoClicked() {
     VideoModel video = getContent();
-    new AlertDialog.Builder(getContext()).setTitle(video.getTitle())
-        .setMessage(R.string.download_song_description)
-        .setNegativeButton(android.R.string.cancel, (dialog, which) -> {
-          dialog.dismiss();
-        })
-        .setPositiveButton(android.R.string.ok, (dialog, which) -> {
-          Downloader downloader = new Downloader();
-          downloader.getYoutubeDownloadUrl("https://www.youtube.com/watch?v=" + video.getId(),
-              getContext());
-        })
-        .show();
+
+    getContext().startActivity(VideoDetailActivity.getIntent(getContext(), video.getThumbnails().get(2), video.getDuration(), video.getTitle(), "author", "800k", video.getDescription(),"https://www.youtube.com/watch?v=" + video.getId()));
   }
 
   @Override protected void setUpView(View rootView) {

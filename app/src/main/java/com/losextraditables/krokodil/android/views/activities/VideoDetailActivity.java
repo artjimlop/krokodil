@@ -16,17 +16,20 @@ import com.losextraditables.krokodil.android.infrastructure.injector.component.D
 import com.losextraditables.krokodil.android.infrastructure.injector.module.ActivityModule;
 import com.losextraditables.krokodil.android.infrastructure.injector.module.VideoModule;
 import com.losextraditables.krokodil.android.infrastructure.tools.Downloader;
+import com.losextraditables.krokodil.android.presenters.VideoDetailPresenter;
+import com.losextraditables.krokodil.core.model.SongParameters;
 import com.squareup.picasso.Picasso;
+import javax.inject.Inject;
 
 public class VideoDetailActivity extends BaseActivity {
 
-  public static final String EXTRA_THUMBNAIL = "thumbnail";
-  public static final String EXTRA_DURATION = "duration";
-  public static final String EXTRA_TITLE = "title";
-  public static final String EXTRA_AUTHOR = "author";
-  public static final String EXTRA_VISITS = "visits";
-  public static final String EXTRA_DESCRIPTION = "description";
-  public static final String EXTRA_URL = "url";
+  private static final String EXTRA_THUMBNAIL = "thumbnail";
+  private static final String EXTRA_DURATION = "duration";
+  private static final String EXTRA_TITLE = "title";
+  private static final String EXTRA_AUTHOR = "author";
+  private static final String EXTRA_VISITS = "visits";
+  private static final String EXTRA_DESCRIPTION = "description";
+  private static final String EXTRA_URL = "videoId";
 
   @BindView(R.id.video_image) ImageView thumbnail;
   @BindView(R.id.video_title) TextView titleView;
@@ -35,7 +38,10 @@ public class VideoDetailActivity extends BaseActivity {
   @BindView(R.id.video_duration) TextView durationView;
   @BindView(R.id.download_button) TextView downloadView;
   @BindView(R.id.download_loading) ProgressBar loadingView;
-  private String url;
+
+  @Inject VideoDetailPresenter presenter;
+  private String videoId;
+  private SongParameters songParameters;
 
   public static Intent getIntent(Context context, String thumbnail, String duration, String title,
       String author, String visits, String description, String url) {
@@ -67,16 +73,25 @@ public class VideoDetailActivity extends BaseActivity {
     String author = getIntent().getStringExtra(EXTRA_AUTHOR);
     String visits = getIntent().getStringExtra(EXTRA_VISITS);
     String description = getIntent().getStringExtra(EXTRA_DESCRIPTION);
-    url = getIntent().getStringExtra(EXTRA_URL);
-
-    Picasso.with(this)
-        .load(thumbnailUrl)
-        .placeholder(R.drawable.loading_video)
-        .into(thumbnail);
+    videoId = getIntent().getStringExtra(EXTRA_URL);
+    createSongParameters(thumbnailUrl, duration, title, author, visits, description);
+    Picasso.with(this).load(thumbnailUrl).placeholder(R.drawable.loading_video).into(thumbnail);
     durationView.setText(duration);
     titleView.setText(title);
     infoView.setText(getString(R.string.video_detail_info, author, visits));
     descriptionView.setText(description);
+  }
+
+  private void createSongParameters(String thumbnailUrl, String duration, String title,
+      String author, String visits, String description) {
+    songParameters = new SongParameters();
+    songParameters.setDuration(duration);
+    songParameters.setAuthor(author);
+    songParameters.setDescription(description);
+    songParameters.setThumbnailUrl(thumbnailUrl);
+    songParameters.setTitle(title);
+    songParameters.setVideoId(videoId);
+    songParameters.setVisits(visits);
   }
 
   @Override protected void initializeInjector(ApplicationComponent applicationComponent) {
@@ -89,8 +104,7 @@ public class VideoDetailActivity extends BaseActivity {
         .inject(this);
   }
 
-  @Override
-  public void finish() {
+  @Override public void finish() {
     super.finish();
     overridePendingTransition(R.anim.detail_activity_fade_in, R.anim.detail_activity_fade_out);
   }
@@ -98,12 +112,12 @@ public class VideoDetailActivity extends BaseActivity {
   @OnClick(R.id.download_button) public void downloadClicked() {
     downloadView.setVisibility(View.GONE);
     loadingView.setVisibility(View.VISIBLE);
+    presenter.markAsDownloaded(getAndroidApplication().getFirebaseEndpoint(), songParameters);
     Downloader downloader = new Downloader();
-    downloader.getYoutubeDownloadUrl(url, this);
+    downloader.getYoutubeDownloadUrl("https://www.youtube.com/watch?v=" + videoId, this);
   }
 
-  @OnClick(R.id.detail_background)
-  public void onClickOutside() {
+  @OnClick(R.id.detail_background) public void onClickOutside() {
     finish();
   }
 }

@@ -4,6 +4,7 @@ import com.losextraditables.krokodil.android.infrastructure.data.models.mappers.
 import com.losextraditables.krokodil.android.infrastructure.data.models.mappers.VideoEntityMapper;
 import com.losextraditables.krokodil.core.infrastructure.VideoRepository;
 import com.losextraditables.krokodil.core.model.SearchItem;
+import com.losextraditables.krokodil.core.model.SongParameters;
 import com.losextraditables.krokodil.core.model.Video;
 import java.util.List;
 import javax.inject.Inject;
@@ -32,5 +33,9 @@ public class VideoRepositoryImpl implements VideoRepository {
 
   @Override public List<Video> getVideos(List<String> videoIds) {
     return videoEntityMapper.toModel(videoDataSource.getVideosById(videoIds));
+  }
+
+  @Override public void saveDownloadedItem(String endpoint, SongParameters songParameters) {
+    videoDataSource.saveDownloadedItem(endpoint, songParameters);
   }
 }

@@ -8,13 +8,21 @@
  */
 package com.losextraditables.krokodil.android.infrastructure.data.repositories;
 
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.GenericTypeIndicator;
+import com.firebase.client.ValueEventListener;
 import com.losextraditables.krokodil.android.infrastructure.data.models.search.SearchListResponseApiEntity;
 import com.losextraditables.krokodil.android.infrastructure.data.models.search.SearchResponseEntity;
 import com.losextraditables.krokodil.android.infrastructure.data.models.video.VideoApiEntity;
 import com.losextraditables.krokodil.android.infrastructure.data.models.video.VideoListResponseApiEntity;
 import com.losextraditables.krokodil.android.infrastructure.data.net.services.VideoApiService;
 import com.losextraditables.krokodil.core.infrastructure.exception.ServerCommunicationException;
+import com.losextraditables.krokodil.core.model.SongParameters;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
 import retrofit2.Call;
@@ -23,6 +31,7 @@ import retrofit2.Response;
 public class RetrofitVideoDataSource implements VideoDataSource {
 
   private VideoApiService videoApiService;
+  private boolean changeMade = false;
 
   @Inject
   public RetrofitVideoDataSource(VideoApiService videoApiService) {
@@ -65,5 +74,48 @@ public class RetrofitVideoDataSource implements VideoDataSource {
     } catch (IOException e) {
       throw new ServerCommunicationException(e);
     }
+  }
+
+  @Override public void saveDownloadedItem(String endpoint, SongParameters songParameters) {
+    changeMade = false;
+    Firebase firebase = new Firebase(endpoint);
+    Firebase discover = firebase.child("discover");
+    discover.addValueEventListener(new ValueEventListener() {
+      @Override public void onDataChange(DataSnapshot dataSnapshot) {
+        GenericTypeIndicator<List<SongParameters>> t =
+            new GenericTypeIndicator<List<SongParameters>>() {
+            };
+        List<SongParameters> songParametersList = dataSnapshot.getValue(t);
+        List<SongParameters> modifiedList = new ArrayList<>();
+        boolean contained = false;
+        if (!changeMade) {
+          if (songParametersList != null) {
+            for (SongParameters parameters : songParametersList) {
+              if (parameters.getVideoId().equals(songParameters.getVideoId())) {
+                contained = true;
+                parameters.setTimesDownloaded(parameters.getTimesDownloaded() + 1);
+                modifiedList.add(parameters);
+              } else {
+                modifiedList.add(parameters);
+              }
+            }
+            if (!contained) {
+              songParameters.setTimesDownloaded(1L);
+              modifiedList.add(songParameters);
+            }
+            discover.setValue(modifiedList);
+          } else {
+            songParameters.setTimesDownloaded(1L);
+            songParametersList = Collections.singletonList(songParameters);
+            discover.setValue(songParametersList);
+          }
+          changeMade = true;
+        }
+      }
+
+      @Override public void onCancelled(FirebaseError firebaseError) {
+        //TODO something
+      }
+    });
   }
 }

@@ -90,7 +90,7 @@ public class SearchItemRenderer extends Renderer<VideoModel> {
     VideoModel video = getContent();
     videoClickListener.onClick(video.getThumbnails().get(2), time, video.getTitle(),
         video.getChannelTitle(), visits, video.getDescription(),
-        "https://www.youtube.com/watch?v=" + video.getId());
+        video.getId());
   }
 
   @Override protected void setUpView(View rootView) {

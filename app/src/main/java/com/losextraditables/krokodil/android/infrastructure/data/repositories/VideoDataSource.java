@@ -10,6 +10,7 @@ package com.losextraditables.krokodil.android.infrastructure.data.repositories;
 
 import com.losextraditables.krokodil.android.infrastructure.data.models.search.SearchResponseEntity;
 import com.losextraditables.krokodil.android.infrastructure.data.models.video.VideoApiEntity;
+import com.losextraditables.krokodil.core.model.SongParameters;
 import java.util.List;
 
 public interface VideoDataSource {
@@ -19,4 +20,6 @@ public interface VideoDataSource {
   List<SearchResponseEntity> search(String query);
 
   List<VideoApiEntity> getVideosById(List<String> videoIds);
+
+  void saveDownloadedItem(String endpoint, SongParameters songParameters);
 }

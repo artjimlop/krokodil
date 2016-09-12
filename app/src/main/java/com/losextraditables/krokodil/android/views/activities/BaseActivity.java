@@ -13,7 +13,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -41,9 +40,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         GenericTypeIndicator<Version> t = new GenericTypeIndicator<Version>() {
         };
         Version version = snapshot.getValue(t);
-        Log.d("FIREBASE", "pasa por aqui");
         if (BuildConfig.VERSION_CODE < version.getVersion()) {
-          Log.d("FIREBASE", "pasa por if");
           showUpdateRequired(version.getDownloadLink());
         }
       }
@@ -61,7 +58,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     return getAndroidApplication().getComponent();
   }
 
-  private AndroidApplication getAndroidApplication() {
+  public AndroidApplication getAndroidApplication() {
     return (AndroidApplication) getApplication();
   }
 

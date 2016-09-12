@@ -38,12 +38,11 @@ public class SearchActivity extends BaseActivity implements SearchVideosView {
   private RendererBuilder<VideoModel> rendererBuilder;
   private RVRendererAdapter<VideoModel> adapter;
 
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
+  @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_search);
     ButterKnife.bind(this);
-
+    Context context = this;
     presenter.initialize(this);
 
     ActionBar actionBar = this.getSupportActionBar();
@@ -55,10 +54,17 @@ public class SearchActivity extends BaseActivity implements SearchVideosView {
 
     resultVideos.setLayoutManager(new LinearLayoutManager(this));
 
-    rendererBuilder = new RendererBuilder<VideoModel>()
-        .withPrototype(new SearchItemRenderer())
-        .bind(VideoModel
-            .class, SearchItemRenderer.class);
+    SearchItemRenderer searchItemRenderer = new SearchItemRenderer();
+    searchItemRenderer.setClickListener(
+        (thumbnail, time, title, author, visits, description, url) -> {
+          startActivity(
+              VideoDetailActivity.getIntent(context, thumbnail, time, title, author, visits,
+                  description, url));
+          overridePendingTransition(R.anim.detail_activity_fade_in,
+              R.anim.detail_activity_fade_out);
+        });
+    rendererBuilder = new RendererBuilder<VideoModel>().withPrototype(searchItemRenderer)
+        .bind(VideoModel.class, SearchItemRenderer.class);
   }
 
   @Override protected void initializeInjector(ApplicationComponent applicationComponent) {
@@ -66,7 +72,9 @@ public class SearchActivity extends BaseActivity implements SearchVideosView {
     DaggerVideosComponent.builder()
         .applicationComponent(applicationComponent)
         .activityModule(new ActivityModule(this))
-        .videoModule(new VideoModule()).build().inject(this);
+        .videoModule(new VideoModule())
+        .build()
+        .inject(this);
   }
 
   @Override public boolean onCreateOptionsMenu(Menu menu) {
@@ -95,6 +103,7 @@ public class SearchActivity extends BaseActivity implements SearchVideosView {
     searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
       @Override public boolean onQueryTextSubmit(String queryText) {
         presenter.search(queryText);
+        searchView.clearFocus();
         return true;
       }
 
@@ -109,8 +118,7 @@ public class SearchActivity extends BaseActivity implements SearchVideosView {
 
   @Override public void showVideos(List<VideoModel> videoModels) {
     ListAdapteeCollection<VideoModel> adapteeCollection = new ListAdapteeCollection<>(videoModels);
-    adapter =
-        new RVRendererAdapter<>(rendererBuilder, adapteeCollection);
+    adapter = new RVRendererAdapter<>(rendererBuilder, adapteeCollection);
     resultVideos.setAdapter(adapter);
   }
 

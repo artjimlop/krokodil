@@ -1,6 +1,7 @@
 package com.losextraditables.krokodil.android.views.activities;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -65,8 +66,14 @@ public class MainActivity extends BaseActivity implements PopularVideosView {
     createPermissionListeners();
 
     popularVideos.setLayoutManager(new LinearLayoutManager(this));
-
-    rendererBuilder = new RendererBuilder<VideoModel>().withPrototype(new VideoRenderer())
+    Context context = this;
+    VideoRenderer videoRenderer = new VideoRenderer();
+    videoRenderer.setClickListener((thumbnail, time, title, author, visits, description, url) -> {
+      startActivity(VideoDetailActivity.getIntent(context, thumbnail, time, title, author, visits,
+          description, url));
+      overridePendingTransition(R.anim.detail_activity_fade_in, R.anim.detail_activity_fade_out);
+    });
+    rendererBuilder = new RendererBuilder<VideoModel>().withPrototype(videoRenderer)
         .bind(VideoModel.class, VideoRenderer.class);
 
     presenter.initialize(this);

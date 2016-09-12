@@ -1,7 +1,6 @@
 package com.losextraditables.krokodil.android.views.renders;
 
 import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +11,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.example.KMNumbers;
 import com.losextraditables.krokodil.R;
-import com.losextraditables.krokodil.android.infrastructure.tools.Downloader;
 import com.losextraditables.krokodil.android.models.VideoModel;
+import com.losextraditables.krokodil.android.views.listeners.VideoClickListener;
 import com.pedrogomez.renderers.Renderer;
 import com.squareup.picasso.Picasso;
 import org.joda.time.Period;
@@ -29,9 +28,11 @@ public class SearchItemRenderer extends Renderer<VideoModel> {
   @BindView(R.id.video_title) TextView title;
   @BindView(R.id.video_frame) View durationFrame;
   @BindView(R.id.video_duration) TextView duration;
+  private VideoClickListener videoClickListener;
+  private String time;
+  private String visits;
 
-  @Override
-  protected View inflate(LayoutInflater inflater, ViewGroup parent) {
+  @Override protected View inflate(LayoutInflater inflater, ViewGroup parent) {
     View inflatedView = inflater.inflate(R.layout.item_video_search, parent, false);
     ButterKnife.bind(this, inflatedView);
     return inflatedView;
@@ -53,7 +54,7 @@ public class SearchItemRenderer extends Renderer<VideoModel> {
   }
 
   private void setupVisits(VideoModel video) {
-    String visits = String.format(getContext().getString(R.string.format_visits),
+    visits = String.format(getContext().getString(R.string.format_visits),
         KMNumbers.formatNumbers(video.getViewCount()));
     moreInfo.setVisibility(View.VISIBLE);
     moreInfo.setText(visits);
@@ -66,7 +67,7 @@ public class SearchItemRenderer extends Renderer<VideoModel> {
     int hours = period.getHours();
     int minutes = period.getMinutes();
     int seconds = period.getSeconds();
-    String time = getStringDuration(minutes) + ":" + getStringDuration(seconds);
+    time = getStringDuration(minutes) + ":" + getStringDuration(seconds);
     if (hours > 0) {
       time = getStringDuration(hours) + ":" + getStringDuration(minutes) + ":" + getStringDuration(
           seconds);
@@ -81,19 +82,15 @@ public class SearchItemRenderer extends Renderer<VideoModel> {
     return String.valueOf(duration);
   }
 
+  public void setClickListener(VideoClickListener videoClickListener) {
+    this.videoClickListener = videoClickListener;
+  }
+
   @OnClick(R.id.video_layout) void onVideoClicked() {
     VideoModel video = getContent();
-    new AlertDialog.Builder(getContext()).setTitle(video.getTitle())
-        .setMessage(R.string.download_song_description)
-        .setNegativeButton(android.R.string.cancel, (dialog, which) -> {
-          dialog.dismiss();
-        })
-        .setPositiveButton(android.R.string.ok, (dialog, which) -> {
-          Downloader downloader = new Downloader();
-          downloader.getYoutubeDownloadUrl("https://www.youtube.com/watch?v=" + video.getId(),
-              getContext());
-        })
-        .show();
+    videoClickListener.onClick(video.getThumbnails().get(2), time, video.getTitle(),
+        video.getChannelTitle(), visits, video.getDescription(),
+        "https://www.youtube.com/watch?v=" + video.getId());
   }
 
   @Override protected void setUpView(View rootView) {

@@ -3,7 +3,9 @@ package com.losextraditables.krokodil.android.views.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,6 +33,8 @@ public class VideoDetailActivity extends BaseActivity {
   @BindView(R.id.video_info) TextView infoView;
   @BindView(R.id.video_description) TextView descriptionView;
   @BindView(R.id.video_duration) TextView durationView;
+  @BindView(R.id.download_button) TextView downloadView;
+  @BindView(R.id.download_loading) ProgressBar loadingView;
   private String url;
 
   public static Intent getIntent(Context context, String thumbnail, String duration, String title,
@@ -50,6 +54,13 @@ public class VideoDetailActivity extends BaseActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_video_detail);
     ButterKnife.bind(this);
+    if (getSupportActionBar() != null) {
+      getActionBar().hide();
+    }
+    setupVideoInfo();
+  }
+
+  private void setupVideoInfo() {
     String thumbnailUrl = getIntent().getStringExtra(EXTRA_THUMBNAIL);
     String duration = getIntent().getStringExtra(EXTRA_DURATION);
     String title = getIntent().getStringExtra(EXTRA_TITLE);
@@ -64,7 +75,7 @@ public class VideoDetailActivity extends BaseActivity {
         .into(thumbnail);
     durationView.setText(duration);
     titleView.setText(title);
-    infoView.setText(author + " · " + visits);
+    infoView.setText(getString(R.string.video_detail_info, author, visits));
     descriptionView.setText(description);
   }
 
@@ -78,8 +89,21 @@ public class VideoDetailActivity extends BaseActivity {
         .inject(this);
   }
 
+  @Override
+  public void finish() {
+    super.finish();
+    overridePendingTransition(R.anim.detail_activity_fade_in, R.anim.detail_activity_fade_out);
+  }
+
   @OnClick(R.id.download_button) public void downloadClicked() {
+    downloadView.setVisibility(View.GONE);
+    loadingView.setVisibility(View.VISIBLE);
     Downloader downloader = new Downloader();
     downloader.getYoutubeDownloadUrl(url, this);
+  }
+
+  @OnClick(R.id.detail_background)
+  public void onClickOutside() {
+    finish();
   }
 }

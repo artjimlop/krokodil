@@ -22,8 +22,14 @@ public class PopularVideosPresenter implements Presenter {
 
   public void initialize(PopularVideosView view) {
     this.view = view;
+    view.showLoading();
+    loadPopularVideos();
+  }
+
+  private void loadPopularVideos() {
     getPopularVideosAction.getPopularVideos(new Action.Callback<List<Video>>() {
       @Override public void onLoaded(List<Video> videos) {
+        view.hideLoading();
         view.showVideos(videoModelMapper.toModel(videos));
       }
 
@@ -32,7 +38,7 @@ public class PopularVideosPresenter implements Presenter {
       }
 
       @Override public void onError() {
-
+        view.hideLoading();
       }
     });
   }

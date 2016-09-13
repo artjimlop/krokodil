@@ -1,6 +1,7 @@
 package com.losextraditables.krokodil.android.views.activities;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -11,8 +12,10 @@ import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -49,6 +52,7 @@ public class MainActivity extends BaseActivity implements PopularVideosView {
   @BindView(R.id.popular_video_list) RecyclerView popularVideos;
   @BindView(R.id.search_menu) FloatingActionButton menu;
   @BindView(R.id.content) ViewGroup rootView;
+  @BindView(R.id.loading_view) ProgressBar loadingView;
 
   private RendererBuilder<VideoModel> rendererBuilder;
   private RVRendererAdapter<VideoModel> adapter;
@@ -62,10 +66,15 @@ public class MainActivity extends BaseActivity implements PopularVideosView {
     createPermissionListeners();
 
     popularVideos.setLayoutManager(new LinearLayoutManager(this));
-
-    rendererBuilder = new RendererBuilder<VideoModel>().withPrototype(new VideoRenderer())
+    Context context = this;
+    VideoRenderer videoRenderer = new VideoRenderer();
+    videoRenderer.setClickListener((thumbnail, time, title, author, visits, description, url) -> {
+      startActivity(VideoDetailActivity.getIntent(context, thumbnail, time, title, author, visits,
+          description, url));
+      overridePendingTransition(R.anim.detail_activity_fade_in, R.anim.detail_activity_fade_out);
+    });
+    rendererBuilder = new RendererBuilder<VideoModel>().withPrototype(videoRenderer)
         .bind(VideoModel.class, VideoRenderer.class);
-    //TODO finish
 
     presenter.initialize(this);
   }
@@ -98,6 +107,14 @@ public class MainActivity extends BaseActivity implements PopularVideosView {
     ListAdapteeCollection<VideoModel> adapteeCollection = new ListAdapteeCollection<>(videoModels);
     adapter = new RVRendererAdapter<>(rendererBuilder, adapteeCollection);
     popularVideos.setAdapter(adapter);
+  }
+
+  @Override public void showLoading() {
+    loadingView.setVisibility(View.VISIBLE);
+  }
+
+  @Override public void hideLoading() {
+    loadingView.setVisibility(View.GONE);
   }
 
   @OnClick(R.id.search_menu) public void onSearchClick() {

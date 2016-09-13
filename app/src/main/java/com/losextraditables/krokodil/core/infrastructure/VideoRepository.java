@@ -9,4 +9,6 @@ public interface VideoRepository {
   List<Video> getPopularVideos();
 
   List<SearchItem> search(String query);
+
+  List<Video> getVideos(List<String> videoIds);
 }

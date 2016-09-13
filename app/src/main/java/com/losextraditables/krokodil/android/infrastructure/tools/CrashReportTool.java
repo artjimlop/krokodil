@@ -5,5 +5,4 @@ public interface CrashReportTool {
   void logException(Throwable error);
 
   void logException(String message);
-
 }

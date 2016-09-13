@@ -9,7 +9,7 @@
     android:paddingBottom="8dp"
     android:paddingEnd="16dp"
     android:paddingStart="16dp"
-    >
+>
 
   <FrameLayout android:layout_width="128dp"
       android:layout_height="76dp"

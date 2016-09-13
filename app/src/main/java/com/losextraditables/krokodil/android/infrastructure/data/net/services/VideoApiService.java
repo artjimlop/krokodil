@@ -8,8 +8,8 @@
  */
 package com.losextraditables.krokodil.android.infrastructure.data.net.services;
 
-import com.losextraditables.krokodil.android.infrastructure.data.models.VideoListResponse;
-import com.losextraditables.krokodil.android.infrastructure.data.models.search.SearchListResponse;
+import com.losextraditables.krokodil.android.infrastructure.data.models.search.SearchListResponseApiEntity;
+import com.losextraditables.krokodil.android.infrastructure.data.models.video.VideoListResponseApiEntity;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
@@ -17,8 +17,11 @@ import retrofit2.http.Query;
 public interface VideoApiService {
 
   @GET("videos?chart=mostPopular&part=snippet&maxResults=50")
-  Call<VideoListResponse> getPopularVideos();
+  Call<VideoListResponseApiEntity> getPopularVideos();
 
-  @GET("search?part=snippet&type=video&maxResults=50") Call<SearchListResponse> searchVideos(
-      @Query("q") String query);
+  @GET("search?part=snippet&type=video&maxResults=50")
+  Call<SearchListResponseApiEntity> searchVideos(@Query("q") String query);
+
+  @GET("videos?part=snippet%2CcontentDetails%2Cstatistics&type=video")
+  Call<VideoListResponseApiEntity> getVideos(@Query("id") String videoIds);
 }

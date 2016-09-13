@@ -12,15 +12,15 @@ import javax.inject.Singleton;
 @Singleton
 public class UIThread implements PostExecutionThread {
 
-    private final Handler handler;
+  private final Handler handler;
 
-    @Inject
-    public UIThread() {
-        this.handler = new Handler(Looper.getMainLooper());
-    }
+  @Inject
+  public UIThread() {
+    this.handler = new Handler(Looper.getMainLooper());
+  }
 
-    @Override
-    public void post(Runnable runnable) {
-        handler.post(runnable);
-    }
+  @Override
+  public void post(Runnable runnable) {
+    handler.post(runnable);
+  }
 }

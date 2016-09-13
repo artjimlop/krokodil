@@ -28,9 +28,9 @@ apply plugin: 'com.google.gms.google-services'
 
 def cfg = rootProject.ext.configuration;
 
-def versionMajor = 0
+def versionMajor = 1
 def versionMinor = 0
-def versionRevision = 2
+def versionRevision = 0
 
 Properties properties = new Properties()
 def props = file('../signin.properties')
@@ -54,6 +54,7 @@ android {
   buildToolsVersion "24.0.1"
   defaultConfig {
     applicationId "com.losextraditables.krokodil"
+    multiDexEnabled true
     minSdkVersion 15
     targetSdkVersion 24
     versionCode versionMajor * 1000000 + versionMinor * 1000 + versionRevision
@@ -75,6 +76,9 @@ android {
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
       signingConfig signingConfigs.release
     }
+  }
+  lintOptions {
+    abortOnError false
   }
 }
 
@@ -99,6 +103,9 @@ dependencies {
   compile 'com.googlecode.mp4parser:isoparser:1.1.17'
   compile 'com.github.HaarigerHarald:android-youtubeExtractor:master-SNAPSHOT'
   compile 'com.karumi:dexter:2.2.2'
+  compile 'net.danlew:android.joda:2.9.4.1'
+  compile 'com.shootr:KMNumbers:1.0.0'
+  compile 'com.android.support:cardview-v7:24.2.0'
   // Arch dependencies
   provided 'org.glassfish:javax.annotation:10.0-b28'
   apt "com.google.dagger:dagger-compiler:2.4"

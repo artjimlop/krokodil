@@ -5,7 +5,7 @@ import com.losextraditables.krokodil.android.models.mapper.VideoModelMapper;
 import com.losextraditables.krokodil.android.views.SearchVideosView;
 import com.losextraditables.krokodil.core.actions.Action;
 import com.losextraditables.krokodil.core.actions.SearchVideosAction;
-import com.losextraditables.krokodil.core.model.SearchItem;
+import com.losextraditables.krokodil.core.model.Video;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -28,9 +28,11 @@ public class SearchVideosPresenter implements Presenter {
   }
 
   public void search(String query) {
-    searchVideosAction.search(query, new Action.Callback<List<SearchItem>>() {
-      @Override public void onLoaded(List<SearchItem> videos) {
-        view.showVideos(searchModelMapper.toModel(videos));
+    view.showLoading();
+    searchVideosAction.search(query, new Action.Callback<List<Video>>() {
+      @Override public void onLoaded(List<Video> videos) {
+        view.hideLoading();
+        view.showVideos(videoModelMapper.toModel(videos));
         view.hideKeyboard();
       }
 

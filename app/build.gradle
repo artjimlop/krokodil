@@ -30,7 +30,7 @@ def cfg = rootProject.ext.configuration;
 
 def versionMajor = 1
 def versionMinor = 0
-def versionRevision = 0
+def versionRevision = 2
 
 Properties properties = new Properties()
 def props = file('../signin.properties')

@@ -14,10 +14,6 @@ import android.widget.ProgressBar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.losextraditables.krokodil.R;
-import com.losextraditables.krokodil.android.infrastructure.injector.component.ApplicationComponent;
-import com.losextraditables.krokodil.android.infrastructure.injector.component.DaggerVideosComponent;
-import com.losextraditables.krokodil.android.infrastructure.injector.module.ActivityModule;
-import com.losextraditables.krokodil.android.infrastructure.injector.module.VideoModule;
 import com.losextraditables.krokodil.android.models.VideoModel;
 import com.losextraditables.krokodil.android.presenters.SearchVideosPresenter;
 import com.losextraditables.krokodil.android.views.SearchVideosView;
@@ -41,6 +37,7 @@ public class SearchActivity extends BaseActivity implements SearchVideosView {
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_search);
+    getComponent().inject(this);
     ButterKnife.bind(this);
     Context context = this;
     presenter.initialize(this);
@@ -65,16 +62,6 @@ public class SearchActivity extends BaseActivity implements SearchVideosView {
         });
     rendererBuilder = new RendererBuilder<VideoModel>().withPrototype(searchItemRenderer)
         .bind(VideoModel.class, SearchItemRenderer.class);
-  }
-
-  @Override protected void initializeInjector(ApplicationComponent applicationComponent) {
-    applicationComponent.inject(this);
-    DaggerVideosComponent.builder()
-        .applicationComponent(applicationComponent)
-        .activityModule(new ActivityModule(this))
-        .videoModule(new VideoModule())
-        .build()
-        .inject(this);
   }
 
   @Override public boolean onCreateOptionsMenu(Menu menu) {

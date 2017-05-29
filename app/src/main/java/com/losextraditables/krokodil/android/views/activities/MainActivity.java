@@ -26,10 +26,6 @@ import com.karumi.dexter.listener.single.CompositePermissionListener;
 import com.karumi.dexter.listener.single.PermissionListener;
 import com.karumi.dexter.listener.single.SnackbarOnDeniedPermissionListener;
 import com.losextraditables.krokodil.R;
-import com.losextraditables.krokodil.android.infrastructure.injector.component.ApplicationComponent;
-import com.losextraditables.krokodil.android.infrastructure.injector.component.DaggerVideosComponent;
-import com.losextraditables.krokodil.android.infrastructure.injector.module.ActivityModule;
-import com.losextraditables.krokodil.android.infrastructure.injector.module.VideoModule;
 import com.losextraditables.krokodil.android.infrastructure.tools.Downloader;
 import com.losextraditables.krokodil.android.infrastructure.tools.Intents;
 import com.losextraditables.krokodil.android.models.VideoModel;
@@ -61,6 +57,7 @@ public class MainActivity extends BaseActivity implements PopularVideosView {
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
+    getComponent().inject(this);
     ButterKnife.bind(this);
 
     createPermissionListeners();
@@ -77,16 +74,6 @@ public class MainActivity extends BaseActivity implements PopularVideosView {
         .bind(VideoModel.class, VideoRenderer.class);
 
     presenter.initialize(this);
-  }
-
-  @Override protected void initializeInjector(ApplicationComponent applicationComponent) {
-    applicationComponent.inject(this);
-    DaggerVideosComponent.builder()
-        .applicationComponent(applicationComponent)
-        .activityModule(new ActivityModule(this))
-        .videoModule(new VideoModule())
-        .build()
-        .inject(this);
   }
 
   @Override public boolean onCreateOptionsMenu(Menu menu) {

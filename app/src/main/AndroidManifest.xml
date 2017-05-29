@@ -29,8 +29,11 @@
         android:name=".android.views.activities.SearchActivity"
         android:theme="@style/AppTheme">
     </activity>
-    <activity android:name=".android.views.activities.VideoDetailActivity"
-        android:theme="@style/OverlayTheme" >
+    <activity
+        android:name=".android.views.activities.VideoDetailActivity"
+        android:theme="@style/OverlayTheme">
+    </activity>
+    <activity android:name=".android.views.activities.DiscoverActivity">
     </activity>
   </application>
 

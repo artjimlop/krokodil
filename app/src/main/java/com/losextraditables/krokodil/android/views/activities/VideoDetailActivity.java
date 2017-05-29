@@ -11,10 +11,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.losextraditables.krokodil.R;
-import com.losextraditables.krokodil.android.infrastructure.injector.component.ApplicationComponent;
-import com.losextraditables.krokodil.android.infrastructure.injector.component.DaggerVideosComponent;
-import com.losextraditables.krokodil.android.infrastructure.injector.module.ActivityModule;
-import com.losextraditables.krokodil.android.infrastructure.injector.module.VideoModule;
 import com.losextraditables.krokodil.android.infrastructure.tools.Downloader;
 import com.losextraditables.krokodil.android.presenters.VideoDetailPresenter;
 import com.losextraditables.krokodil.core.model.SongParameters;
@@ -59,6 +55,7 @@ public class VideoDetailActivity extends BaseActivity {
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_video_detail);
+    getComponent().inject(this);
     ButterKnife.bind(this);
     if (getSupportActionBar() != null) {
       getActionBar().hide();
@@ -92,16 +89,6 @@ public class VideoDetailActivity extends BaseActivity {
     songParameters.setTitle(title);
     songParameters.setVideoId(videoId);
     songParameters.setVisits(visits);
-  }
-
-  @Override protected void initializeInjector(ApplicationComponent applicationComponent) {
-    applicationComponent.inject(this);
-    DaggerVideosComponent.builder()
-        .applicationComponent(applicationComponent)
-        .activityModule(new ActivityModule(this))
-        .videoModule(new VideoModule())
-        .build()
-        .inject(this);
   }
 
   @Override public void finish() {

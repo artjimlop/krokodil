@@ -12,6 +12,7 @@ package com.losextraditables.krokodil.android.infrastructure.injector.component;
 import com.losextraditables.krokodil.android.infrastructure.injector.PerActivity;
 import com.losextraditables.krokodil.android.infrastructure.injector.module.ActivityModule;
 import com.losextraditables.krokodil.android.infrastructure.injector.module.VideoModule;
+import com.losextraditables.krokodil.android.views.activities.DiscoverActivity;
 import com.losextraditables.krokodil.android.views.activities.MainActivity;
 import com.losextraditables.krokodil.android.views.activities.SearchActivity;
 import com.losextraditables.krokodil.android.views.activities.VideoDetailActivity;
@@ -26,4 +27,6 @@ import dagger.Component;
   void inject(SearchActivity searchActivity);
 
   void inject(VideoDetailActivity videoDetailActivity);
+
+  void inject(DiscoverActivity discoverActivity);
 }

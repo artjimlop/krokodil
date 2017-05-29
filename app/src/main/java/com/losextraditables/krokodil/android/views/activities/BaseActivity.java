@@ -23,8 +23,14 @@ import com.losextraditables.krokodil.BuildConfig;
 import com.losextraditables.krokodil.R;
 import com.losextraditables.krokodil.android.infrastructure.data.models.version.Version;
 import com.losextraditables.krokodil.android.infrastructure.injector.component.ApplicationComponent;
+import com.losextraditables.krokodil.android.infrastructure.injector.component.DaggerVideosComponent;
+import com.losextraditables.krokodil.android.infrastructure.injector.component.VideosComponent;
+import com.losextraditables.krokodil.android.infrastructure.injector.module.ActivityModule;
+import com.losextraditables.krokodil.android.infrastructure.injector.module.VideoModule;
 
 public abstract class BaseActivity extends AppCompatActivity {
+
+  private VideosComponent component;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -62,7 +68,18 @@ public abstract class BaseActivity extends AppCompatActivity {
     return (AndroidApplication) getApplication();
   }
 
-  protected abstract void initializeInjector(ApplicationComponent applicationComponent);
+  private void initializeInjector(ApplicationComponent applicationComponent){
+    applicationComponent.inject(this);
+    component = DaggerVideosComponent.builder()
+        .applicationComponent(applicationComponent)
+        .activityModule(new ActivityModule(this))
+        .videoModule(new VideoModule())
+        .build();
+  }
+
+  public VideosComponent getComponent() {
+    return component;
+  }
 
   private void showUpdateRequired(String downloadLink) {
     new AlertDialog.Builder(this).setTitle(R.string.update_alert_title)

@@ -8,6 +8,7 @@
  */
 package com.losextraditables.krokodil.android.infrastructure.data.repositories;
 
+import com.firebase.client.ValueEventListener;
 import com.losextraditables.krokodil.android.infrastructure.data.models.search.SearchResponseEntity;
 import com.losextraditables.krokodil.android.infrastructure.data.models.video.VideoApiEntity;
 import com.losextraditables.krokodil.core.model.SongParameters;
@@ -22,4 +23,7 @@ public interface VideoDataSource {
   List<VideoApiEntity> getVideosById(List<String> videoIds);
 
   void saveDownloadedItem(String endpoint, SongParameters songParameters);
+
+  void getPopularSongs(String endpoint,
+                       ValueEventListener listener);
 }

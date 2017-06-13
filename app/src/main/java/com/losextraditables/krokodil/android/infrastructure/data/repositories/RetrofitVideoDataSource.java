@@ -20,16 +20,20 @@ import com.losextraditables.krokodil.android.infrastructure.data.models.video.Vi
 import com.losextraditables.krokodil.android.infrastructure.data.net.services.VideoApiService;
 import com.losextraditables.krokodil.core.infrastructure.exception.ServerCommunicationException;
 import com.losextraditables.krokodil.core.model.SongParameters;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 import javax.inject.Inject;
+
 import retrofit2.Call;
 import retrofit2.Response;
 
 public class RetrofitVideoDataSource implements VideoDataSource {
 
+  public static final String DISCOVER = "discover";
   private VideoApiService videoApiService;
   private boolean changeMade = false;
 
@@ -79,7 +83,7 @@ public class RetrofitVideoDataSource implements VideoDataSource {
   @Override public void saveDownloadedItem(String endpoint, SongParameters songParameters) {
     changeMade = false;
     Firebase firebase = new Firebase(endpoint);
-    Firebase discover = firebase.child("discover");
+    Firebase discover = firebase.child(DISCOVER);
     discover.addValueEventListener(new ValueEventListener() {
       @Override public void onDataChange(DataSnapshot dataSnapshot) {
         GenericTypeIndicator<List<SongParameters>> t =
@@ -117,5 +121,12 @@ public class RetrofitVideoDataSource implements VideoDataSource {
         //TODO something
       }
     });
+  }
+
+  @Override public void getPopularSongs(String endpoint,
+                                       ValueEventListener listener) {
+    Firebase firebase = new Firebase(endpoint);
+    Firebase discover = firebase.child(DISCOVER);
+    discover.addValueEventListener(listener);
   }
 }

@@ -1,7 +1,7 @@
 package com.losextraditables.krokodil.android.presenters;
 
 import com.losextraditables.krokodil.android.models.mapper.VideoModelMapper;
-import com.losextraditables.krokodil.android.views.PopularVideosView;
+import com.losextraditables.krokodil.android.views.VideosView;
 import com.losextraditables.krokodil.core.actions.Action;
 import com.losextraditables.krokodil.core.actions.GetPopularVideosAction;
 import com.losextraditables.krokodil.core.model.Video;
@@ -12,7 +12,7 @@ public class PopularVideosPresenter implements Presenter {
 
   private final GetPopularVideosAction getPopularVideosAction;
   private final VideoModelMapper videoModelMapper;
-  private PopularVideosView view;
+  private VideosView view;
 
   @Inject public PopularVideosPresenter(GetPopularVideosAction getPopularVideosAction,
       VideoModelMapper videoModelMapper) {
@@ -20,7 +20,7 @@ public class PopularVideosPresenter implements Presenter {
     this.videoModelMapper = videoModelMapper;
   }
 
-  public void initialize(PopularVideosView view) {
+  public void initialize(VideosView view) {
     this.view = view;
     view.showLoading();
     loadPopularVideos();

@@ -16,9 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
+
 import com.github.clans.fab.FloatingActionButton;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
@@ -30,18 +28,24 @@ import com.losextraditables.krokodil.android.infrastructure.tools.Downloader;
 import com.losextraditables.krokodil.android.infrastructure.tools.Intents;
 import com.losextraditables.krokodil.android.models.VideoModel;
 import com.losextraditables.krokodil.android.presenters.PopularVideosPresenter;
-import com.losextraditables.krokodil.android.views.PopularVideosView;
+import com.losextraditables.krokodil.android.views.VideosView;
 import com.losextraditables.krokodil.android.views.listeners.KrokodilPermissionListener;
 import com.losextraditables.krokodil.android.views.renders.VideoRenderer;
 import com.pedrogomez.renderers.ListAdapteeCollection;
 import com.pedrogomez.renderers.RVRendererAdapter;
 import com.pedrogomez.renderers.RendererBuilder;
+
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import javax.inject.Inject;
 
-public class MainActivity extends BaseActivity implements PopularVideosView {
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+public class MainActivity extends BaseActivity implements VideosView {
 
   @Inject PopularVideosPresenter presenter;
 
@@ -85,7 +89,9 @@ public class MainActivity extends BaseActivity implements PopularVideosView {
     if (item.getItemId() == android.R.id.home) {
       return true;
     } else if (item.getItemId() == R.id.menu_share) {
-      shareApp();
+      Intent intent = new Intent(this, DiscoverActivity.class);
+      startActivity(intent);
+      //shareApp();
     }
     return super.onOptionsItemSelected(item);
   }

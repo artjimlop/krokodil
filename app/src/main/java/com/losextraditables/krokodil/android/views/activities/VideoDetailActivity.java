@@ -7,15 +7,18 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
+
 import com.losextraditables.krokodil.R;
 import com.losextraditables.krokodil.android.infrastructure.tools.Downloader;
 import com.losextraditables.krokodil.android.presenters.VideoDetailPresenter;
 import com.losextraditables.krokodil.core.model.SongParameters;
 import com.squareup.picasso.Picasso;
+
 import javax.inject.Inject;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class VideoDetailActivity extends BaseActivity {
 
@@ -81,14 +84,16 @@ public class VideoDetailActivity extends BaseActivity {
 
   private void createSongParameters(String thumbnailUrl, String duration, String title,
       String author, String visits, String description) {
-    songParameters = new SongParameters();
-    songParameters.setDuration(duration);
-    songParameters.setAuthor(author);
-    songParameters.setDescription(description);
-    songParameters.setThumbnailUrl(thumbnailUrl);
-    songParameters.setTitle(title);
-    songParameters.setVideoId(videoId);
-    songParameters.setVisits(visits);
+    songParameters = new SongParameters(
+            thumbnailUrl,
+            duration,
+            title,
+            author,
+            visits,
+            description,
+            videoId,
+            0L
+    );
   }
 
   @Override public void finish() {

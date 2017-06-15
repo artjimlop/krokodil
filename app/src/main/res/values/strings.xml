@@ -1,8 +1,9 @@
 <resources>
-  <string name="app_name">Krokodil Music Downloader</string>
+  <string name="app_name">Music Downloader</string>
   <string name="search_song">Search song</string>
   <string name="activity_find_song_hint">Search</string>
   <string name="fab_search_video">Search video</string>
+  <string name="fab_discover">Trending</string>
   <string name="fab_add_url">Download using link</string>
   <string name="fab_share">Share this awesome app</string>
   <string name="storage_permission_first_explanation">We need your permission to store what you

@@ -73,6 +73,15 @@
       fab:menu_backgroundColor="@android:color/transparent">
 
     <com.github.clans.fab.FloatingActionButton
+        android:id="@+id/menu_discover"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_discover"
+        fab:fab_size="mini"
+        fab:fab_label="@string/fab_discover"
+        style="@style/MenuButtonsSmall.Primary"/>
+
+    <com.github.clans.fab.FloatingActionButton
         android:id="@+id/search_menu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

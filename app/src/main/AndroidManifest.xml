@@ -33,7 +33,8 @@
         android:name=".android.views.activities.VideoDetailActivity"
         android:theme="@style/OverlayTheme">
     </activity>
-    <activity android:name=".android.views.activities.DiscoverActivity">
+    <activity android:name=".android.views.activities.DiscoverActivity"
+        android:label="@string/fab_discover">
     </activity>
   </application>
 

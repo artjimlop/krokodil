@@ -1,8 +1,9 @@
 <resources>
-  <string name="app_name">Krokodil Music Downloader</string>
+  <string name="app_name">Music Downloader</string>
   <string name="search_song">Buscar canción</string>
   <string name="activity_find_song_hint">Buscar</string>
   <string name="fab_search_video">Buscar vídeo</string>
+  <string name="fab_discover">Trending</string>
   <string name="fab_add_url">Descargar mediante un enlace</string>
   <string name="fab_share">Comparte esta app</string>
   <string name="storage_permission_first_explanation">Necesitamos tu permiso para poder descargar

@@ -89,9 +89,7 @@ public class MainActivity extends BaseActivity implements VideosView {
     if (item.getItemId() == android.R.id.home) {
       return true;
     } else if (item.getItemId() == R.id.menu_share) {
-      Intent intent = new Intent(this, DiscoverActivity.class);
-      startActivity(intent);
-      //shareApp();
+      shareApp();
     }
     return super.onOptionsItemSelected(item);
   }
@@ -112,6 +110,11 @@ public class MainActivity extends BaseActivity implements VideosView {
 
   @OnClick(R.id.search_menu) public void onSearchClick() {
     Intent intent = new Intent(this, SearchActivity.class);
+    startActivity(intent);
+  }
+
+  @OnClick(R.id.menu_discover) public void onDiscoverClick() {
+    Intent intent = new Intent(this, DiscoverActivity.class);
     startActivity(intent);
   }
 

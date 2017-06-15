@@ -22,15 +22,13 @@ public class VideoRepositoryImpl implements VideoRepository {
   private final VideoDataSource videoDataSource;
   private final VideoEntityMapper videoEntityMapper;
   private final SearchEntityMapper searchEntityMapper;
-  private final SongParamentersMapper songParamentersMapper;
 
   @Inject
   public VideoRepositoryImpl(VideoDataSource videoDataSource, VideoEntityMapper videoEntityMapper,
-                             SearchEntityMapper searchEntityMapper, SongParamentersMapper songParamentersMapper) {
+                             SearchEntityMapper searchEntityMapper) {
     this.videoDataSource = videoDataSource;
     this.videoEntityMapper = videoEntityMapper;
     this.searchEntityMapper = searchEntityMapper;
-    this.songParamentersMapper = songParamentersMapper;
   }
 
   @Override public List<Video> getPopularVideos() {
@@ -46,23 +44,8 @@ public class VideoRepositoryImpl implements VideoRepository {
   }
 
   @Override public void getDiscoveredVideos(String endpoint,
-                                         Action.Callback<List<Video>> callback) {
-    videoDataSource.getPopularSongs(endpoint,
-            new ValueEventListener() {
-              @Override
-              public void onDataChange(DataSnapshot dataSnapshot) {
-                GenericTypeIndicator<List<SongParameters>> t =
-                        new GenericTypeIndicator<List<SongParameters>>() {
-                        };
-                List<SongParameters> songParametersList = dataSnapshot.getValue(t);
-                callback.onLoaded(songParamentersMapper.toModel(songParametersList));
-              }
-
-              @Override
-              public void onCancelled(FirebaseError firebaseError) {
-                callback.onError();
-              }
-            });
+                                            ValueEventListener listener) {
+    videoDataSource.getPopularSongs(endpoint, listener);
   }
 
   @Override public void saveDownloadedItem(String endpoint, SongParameters songParameters) {

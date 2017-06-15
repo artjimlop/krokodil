@@ -47,7 +47,7 @@ class DiscoverActivity : BaseActivity(), VideosView {
     override fun showVideos(videoModels: MutableList<VideoModel>?) {
         val adapteeCollection = ListAdapteeCollection(videoModels)
         adapter = RVRendererAdapter(rendererBuilder, adapteeCollection)
-        this.discovered_video_list!!.adapter = adapter
+        this.discovered_video_list?.adapter = adapter
     }
 
     override fun showLoading() {

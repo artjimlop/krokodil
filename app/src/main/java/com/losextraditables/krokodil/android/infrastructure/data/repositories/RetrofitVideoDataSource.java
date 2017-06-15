@@ -64,12 +64,15 @@ public class RetrofitVideoDataSource implements VideoDataSource {
 
   @Override public List<VideoApiEntity> getVideosById(List<String> videoIds) {
     try {
+      Integer from = videoIds.size() - 50;
+      Integer to  = videoIds.size() - 1;
+      List<String> lastIds = videoIds.subList(from, to);
       String ids = "";
-      for (int i = 0; i < videoIds.size(); i++) {
-        if (i < videoIds.size() - 1) {
-          ids += videoIds.get(i) + ",";
+      for (int i = 0; i < lastIds.size(); i++) {
+        if (i < lastIds.size() - 1) {
+          ids += lastIds.get(i) + ",";
         } else {
-          ids += videoIds.get(i);
+          ids += lastIds.get(i);
         }
       }
       Call<VideoListResponseApiEntity> call = videoApiService.getVideos(ids);

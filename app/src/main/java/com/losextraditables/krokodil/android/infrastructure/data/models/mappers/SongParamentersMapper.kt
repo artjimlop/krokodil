@@ -15,7 +15,7 @@ class SongParamentersMapper @Inject constructor() {
                 songParameters.title,
                 songParameters.description,
                 mutableListOf(songParameters.thumbnailUrl),
-                songParameters.visits.toLong(),
+                0L,
                 songParameters.author
         )
         return video

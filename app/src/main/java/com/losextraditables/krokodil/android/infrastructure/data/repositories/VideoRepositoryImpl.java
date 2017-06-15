@@ -5,7 +5,6 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.GenericTypeIndicator;
 import com.firebase.client.ValueEventListener;
 import com.losextraditables.krokodil.android.infrastructure.data.models.mappers.SearchEntityMapper;
-import com.losextraditables.krokodil.android.infrastructure.data.models.mappers.SongParamentersMapper;
 import com.losextraditables.krokodil.android.infrastructure.data.models.mappers.VideoEntityMapper;
 import com.losextraditables.krokodil.core.actions.Action;
 import com.losextraditables.krokodil.core.infrastructure.VideoRepository;
@@ -44,8 +43,21 @@ public class VideoRepositoryImpl implements VideoRepository {
   }
 
   @Override public void getDiscoveredVideos(String endpoint,
-                                            ValueEventListener listener) {
-    videoDataSource.getPopularSongs(endpoint, listener);
+                                            Action.Callback<List<SongParameters>> callback) {
+    videoDataSource.getPopularSongs(endpoint, new ValueEventListener() {
+      @Override
+      public void onDataChange(DataSnapshot dataSnapshot) {
+        GenericTypeIndicator<List<SongParameters>> t =
+                new GenericTypeIndicator<List<SongParameters>>() {
+                };
+        callback.onLoaded(dataSnapshot.getValue(t));
+      }
+
+      @Override
+      public void onCancelled(FirebaseError firebaseError) {
+
+      }
+    });
   }
 
   @Override public void saveDownloadedItem(String endpoint, SongParameters songParameters) {

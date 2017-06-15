@@ -1,6 +1,7 @@
 package com.losextraditables.krokodil.android.views;
 
 import com.losextraditables.krokodil.android.models.VideoModel;
+
 import java.util.List;
 
 public interface VideosView {

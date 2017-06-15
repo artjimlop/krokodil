@@ -34,5 +34,6 @@
   <string name="alert_youtube_link_title">Enter a YouTube link</string>
   <string name="youtube_short_link_pettern">https://youtu.be/</string>
   <string name="format_visits">%s visits</string>
+  <string name="format_downloads">%s downloads</string>
   <string name="video_detail_info">%1$s · %2$s</string>
 </resources>

@@ -1,21 +1,18 @@
 package com.losextraditables.krokodil.android.presenters
 
-import com.losextraditables.krokodil.android.models.VideoModel
-import com.losextraditables.krokodil.android.models.mapper.VideoModelMapper
-import com.losextraditables.krokodil.android.views.NullVideosView
-import com.losextraditables.krokodil.android.views.VideosView
+import com.losextraditables.krokodil.android.views.SongsView
 import com.losextraditables.krokodil.core.actions.Action
 import com.losextraditables.krokodil.core.actions.GetDiscoveredVideosAction
-import com.losextraditables.krokodil.core.model.Video
+import com.losextraditables.krokodil.core.model.SongParameters
 import javax.inject.Inject
 
 class DiscoverVideosPresenter @Inject constructor(private val getDiscoveredVideosAction
-                              : GetDiscoveredVideosAction,
-                              private val videoModelMapper: VideoModelMapper): Presenter {
+                              : GetDiscoveredVideosAction
+): Presenter {
 
-    var view: VideosView? = null
+    var view: SongsView? = null
 
-    fun initialize(view: VideosView, firebaseEndpoint: String) {
+    fun initialize(view: SongsView, firebaseEndpoint: String) {
         this.view = view
         loadDiscoveredVideos(firebaseEndpoint)
     }
@@ -23,9 +20,9 @@ class DiscoverVideosPresenter @Inject constructor(private val getDiscoveredVideo
     private fun loadDiscoveredVideos(firebaseEndpoint: String) {
         view?.showLoading()
         getDiscoveredVideosAction.getDiscoveredVideos(firebaseEndpoint,
-                object : Action.Callback<List<Video>> {
-            override fun onLoaded(videos: List<Video>) {
-                showVideos(videoModelMapper.toModel(videos))
+                object : Action.Callback<List<SongParameters>> {
+            override fun onLoaded(songParameters: List<SongParameters>) {
+                showVideos(songParameters)
             }
 
             override fun onComplete() {
@@ -42,9 +39,9 @@ class DiscoverVideosPresenter @Inject constructor(private val getDiscoveredVideo
         view?.hideLoading()
     }
 
-    fun showVideos(videos: List<VideoModel>) {
+    fun showVideos(videos: List<SongParameters>) {
         view?.hideLoading()
-        view?.showVideos(videos)
+        view?.showSongs(videos)
     }
     override fun resume() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
@@ -55,7 +52,7 @@ class DiscoverVideosPresenter @Inject constructor(private val getDiscoveredVideo
     }
 
     override fun destroy() {
-        this.view = NullVideosView()
+        //TODO this.view = NullVideosView()
     }
 
 }

@@ -1,6 +1,6 @@
 package com.losextraditables.krokodil.core.infrastructure;
 
-import com.firebase.client.ValueEventListener;
+import com.losextraditables.krokodil.core.actions.Action;
 import com.losextraditables.krokodil.core.model.SearchItem;
 import com.losextraditables.krokodil.core.model.SongParameters;
 import com.losextraditables.krokodil.core.model.Video;
@@ -16,7 +16,7 @@ public interface VideoRepository {
   List<Video> getVideos(List<String> videoIds);
 
   void getDiscoveredVideos(String endpoint,
-                           ValueEventListener listener);
+                           Action.Callback<List<SongParameters>> callback);
 
   void saveDownloadedItem(String endpoint, SongParameters songParameters);
 }

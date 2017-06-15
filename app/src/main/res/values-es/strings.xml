@@ -34,4 +34,5 @@
   <string name="alert_youtube_link_title">Introduce un enlace de YouTube</string>
   <string name="youtube_short_link_pettern">https://youtu.be/</string>
   <string name="format_visits">%s visualizaciones</string>
+  <string name="format_downloads">%s descargas</string>
 </resources>

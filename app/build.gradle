@@ -32,8 +32,8 @@ apply plugin: 'kotlin-android-extensions'
 def cfg = rootProject.ext.configuration;
 
 def versionMajor = 1
-def versionMinor = 0
-def versionRevision = 2
+def versionMinor = 1
+def versionRevision = 0
 
 Properties properties = new Properties()
 def props = file('../signin.properties')

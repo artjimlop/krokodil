@@ -6,6 +6,7 @@ import com.losextraditables.krokodil.core.infrastructure.executor.PostExecutionT
 import com.losextraditables.krokodil.core.infrastructure.executor.ThreadExecutor;
 import com.losextraditables.krokodil.core.model.Video;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -35,7 +36,11 @@ public class GetPopularVideosAction implements Action {
       for (Video popularVideo : popularVideos) {
         ids.add(popularVideo.getId());
       }
-      notifyLoaded(videoRepository.getVideos(ids));
+      if (ids.isEmpty()) {
+        notifyLoaded(Collections.emptyList());
+      } else {
+        notifyLoaded(videoRepository.getVideos(ids));
+      }
     } catch (ServerCommunicationException error) {
       //TODO
     }

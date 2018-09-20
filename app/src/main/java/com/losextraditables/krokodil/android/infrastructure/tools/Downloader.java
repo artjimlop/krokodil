@@ -21,46 +21,32 @@ public class Downloader {
 
   public void getYoutubeDownloadUrl(String youtubeLink, Context context) {
     this.context = context;
-    YouTubeUriExtractor ytEx = new YouTubeUriExtractor(context) {
+      YouTubeExtractor ytEx = new YouTubeExtractor(this) {
 
-      @Override
-      public void onUrisAvailable(String videoId, String videoTitle, SparseArray<YtFile> ytFiles) {
-        formatsToShowList = new ArrayList<>();
-        for (int i = 0, itag; i < ytFiles.size(); i++) {
-          itag = ytFiles.keyAt(i);
-          YtFile ytFile = ytFiles.get(itag);
+        @Override
+        public void onExtractionComplete(SparseArray<YtFile> ytFiles, VideoMeta vMeta) {
+            if (ytFiles == null) {
+                return;
+            }
+            // Iterate over itags
+            for (int i = 0, itag; i < ytFiles.size(); i++) {
+                itag = ytFiles.keyAt(i);
+                // ytFile represents one file with its url and meta data
+                YtFile ytFile = ytFiles.get(itag);
 
-          if (ytFile.getMeta().getHeight() == -1 || ytFile.getMeta().getHeight() >= 360) {
-            addFormatToList(ytFile, ytFiles);
-          }
+                // Just add videos in a decent format => height -1 = audio
+                if (ytFile.getFormat().getHeight() == -1 || ytFile.getFormat().getHeight() >= 360) {
+                    addButtonToMainLayout(vMeta.getTitle(), ytFile);
+                }
+            }
         }
-        for (YtFragmentedVideo files : formatsToShowList) {
-          addButtonToMainLayout(videoTitle, files);
-        }
-      }
     };
-    ytEx.setIncludeWebM(false);
-    ytEx.setParseDashManifest(true);
-    ytEx.execute(youtubeLink);
+    //ytEx.setIncludeWebM(false);
+    //ytEx.setParseDashManifest(true);
+    ytEx.extract(youtubeLink, true, false);
   }
 
-  private void addFormatToList(YtFile ytFile, SparseArray<YtFile> ytFiles) {
-    int height = ytFile.getMeta().getHeight();
-    YtFragmentedVideo frVideo = new YtFragmentedVideo();
-    frVideo.height = height;
-    if (ytFile.getMeta().isDashContainer()) {
-      if (height > 0) {
-        frVideo.videoFile = ytFile;
-      } else {
-        frVideo.audioFile = ytFile;
-      }
-    } else {
-      frVideo.videoFile = ytFile;
-    }
-    formatsToShowList.add(frVideo);
-  }
-
-  private void addButtonToMainLayout(final String videoTitle, final YtFragmentedVideo ytFrVideo) {
+  private void addButtonToMainLayout(final String videoTitle, final YtFile ytFrVideo) {
     String filename;
     if (videoTitle.length() > 55) {
       filename = videoTitle.substring(0, 55);
